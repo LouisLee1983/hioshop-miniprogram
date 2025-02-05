@@ -129,9 +129,9 @@ Page({
         util.request(api.OrderExpressInfo, {
             orderId: that.data.orderId
         }).then(function (res) {
-            if (res.errno === 0) {
-                let express = res.data;
-                express.traces = JSON.parse(res.data.traces);
+            if (res.data.errno === 0) {
+                let express = res.data.data;
+                express.traces = JSON.parse(res.data.data.traces);
                 that.setData({
                     onPosting: 1,
                     express: express
@@ -144,23 +144,23 @@ Page({
         util.request(api.OrderDetail, {
             orderId: that.data.orderId
         }).then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    orderInfo: res.data.orderInfo,
-                    orderGoods: res.data.orderGoods,
-                    handleOption: res.data.handleOption,
-                    textCode: res.data.textCode,
-                    goodsCount: res.data.goodsCount
+                    orderInfo: res.data.data.orderInfo,
+                    orderGoods: res.data.data.orderGoods,
+                    handleOption: res.data.data.handleOption,
+                    textCode: res.data.data.textCode,
+                    goodsCount: res.data.data.goodsCount
                 });
-                let receive = res.data.textCode.receive;
+                let receive = res.data.data.textCode.receive;
                 if (receive == true) {
-                    let confirm_remainTime = res.data.orderInfo.confirm_remainTime;
+                    let confirm_remainTime = res.data.data.orderInfo.confirm_remainTime;
                     remaintimer.reTime(confirm_remainTime, 'c_remainTime', that);
                 }
-                let oCancel = res.data.handleOption.cancel;
+                let oCancel = res.data.data.handleOption.cancel;
                 let payTime = 0;
                 if (oCancel == true) {
-                    payTime = res.data.orderInfo.final_pay_time
+                    payTime = res.data.data.orderInfo.final_pay_time
                     that.orderTimer(payTime);
                 }
             }
@@ -172,7 +172,7 @@ Page({
         util.request(api.OrderCancel, {
             orderId: that.data.orderId
         }, 'POST').then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.getOrderDetail();
             } else {
                 util.showErrorToast(res.errmsg);
@@ -190,7 +190,7 @@ Page({
                     util.request(api.OrderDelete, {
                         orderId: that.data.orderId
                     }, 'POST').then(function (res) {
-                        if (res.errno === 0) {
+                        if (res.data.errno === 0) {
                             wx.showToast({
                                 title: '删除订单成功'
                             });
@@ -216,7 +216,7 @@ Page({
                     util.request(api.OrderConfirm, {
                         orderId: that.data.orderId
                     }, 'POST').then(function (res) {
-                        if (res.errno === 0) {
+                        if (res.data.errno === 0) {
                             wx.showToast({
                                 title: '确认收货成功！'
                             });
@@ -241,7 +241,7 @@ Page({
                     util.request(api.OrderCancel, {
                         orderId: that.data.orderId
                     }, 'POST').then(function (res) {
-                        if (res.errno === 0) {
+                        if (res.data.errno === 0) {
                             wx.showToast({
                                 title: '取消订单成功'
                             });

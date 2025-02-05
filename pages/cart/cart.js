@@ -61,19 +61,19 @@ Page({
     getCartList: function() {
         let that = this;
         util.request(api.CartList).then(function(res) {
-            if (res.errno === 0) {
-                let hasCartGoods = res.data.cartList;
+            if (res.data.errno === 0) {
+                let hasCartGoods = res.data.data.cartList;
                 if (hasCartGoods.length != 0) {
                     hasCartGoods = 1;
                 } else {
                     hasCartGoods = 0;
                 }
                 that.setData({
-                    cartGoods: res.data.cartList,
-                    cartTotal: res.data.cartTotal,
+                    cartGoods: res.data.data.cartList,
+                    cartTotal: res.data.data.cartTotal,
                     hasCartGoods: hasCartGoods
                 });
-                if (res.data.cartTotal.numberChange == 1) {
+                if (res.data.data.cartTotal.numberChange == 1) {
                     util.showErrorToast('部分商品库存有变动');
                 }
             }
@@ -117,10 +117,10 @@ Page({
                 productIds: productIds.join(','),
                 isChecked: that.isCheckedAll() ? 0 : 1
             }, 'POST').then(function(res) {
-                if (res.errno === 0) {
+                if (res.data.errno === 0) {
                     that.setData({
-                        cartGoods: res.data.cartList,
-                        cartTotal: res.data.cartTotal
+                        cartGoods: res.data.data.cartList,
+                        cartTotal: res.data.data.cartTotal
                     });
                 }
 
@@ -154,10 +154,10 @@ Page({
             number: number,
             id: id
         }, 'POST').then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    cartGoods: res.data.cartList,
-                    cartTotal: res.data.cartTotal
+                    cartGoods: res.data.data.cartList,
+                    cartTotal: res.data.data.cartTotal
                 });
                 let cartItem = that.data.cartGoods[itemIndex];
                 cartItem.number = number;
@@ -196,14 +196,14 @@ Page({
     },
     getCartNum: function() {
         util.request(api.CartGoodsCount).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 let cartGoodsCount = '';
-                if (res.data.cartTotal.goodsCount == 0) {
+                if (res.data.data.cartTotal.goodsCount == 0) {
                     wx.removeTabBarBadge({
                         index: 2,
                     })
                 } else {
-                    cartGoodsCount = res.data.cartTotal.goodsCount + '';
+                    cartGoodsCount = res.data.data.cartTotal.goodsCount + '';
                     wx.setTabBarBadge({
                         index: 2,
                         text: cartGoodsCount
@@ -249,10 +249,10 @@ Page({
                 productIds: that.data.cartGoods[itemIndex].product_id,
                 isChecked: that.data.cartGoods[itemIndex].checked ? 0 : 1
             }, 'POST').then(function(res) {
-                if (res.errno === 0) {
+                if (res.data.errno === 0) {
                     that.setData({
-                        cartGoods: res.data.cartList,
-                        cartTotal: res.data.cartTotal
+                        cartGoods: res.data.data.cartList,
+                        cartTotal: res.data.data.cartTotal
                     });
                 }
 
@@ -344,11 +344,11 @@ Page({
         util.request(api.CartDelete, {
             productIds: productIds
         }, 'POST').then(function(res) {
-            if (res.errno === 0) {
-                let cartList = res.data.cartList;
+            if (res.data.errno === 0) {
+                let cartList = res.data.data.cartList;
                 that.setData({
                     cartGoods: cartList,
-                    cartTotal: res.data.cartTotal
+                    cartTotal: res.data.data.cartTotal
                 });
                 that.getCartList();
                 that.getCartNum();

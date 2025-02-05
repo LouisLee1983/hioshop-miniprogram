@@ -120,27 +120,27 @@ Page({
             orderFrom: orderFrom,
             type: 0
         }).then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 let addressId = 0;
-                if (res.data.checkedAddress != 0) {
-                    addressId = res.data.checkedAddress.id;
+                if (res.data.data.checkedAddress != 0) {
+                    addressId = res.data.data.checkedAddress.id;
                 }
                 that.setData({
-                    checkedGoodsList: res.data.checkedGoodsList,
-                    checkedAddress: res.data.checkedAddress,
-                    actualPrice: res.data.actualPrice,
+                    checkedGoodsList: res.data.data.checkedGoodsList,
+                    checkedAddress: res.data.data.checkedAddress,
+                    actualPrice: res.data.data.actualPrice,
                     addressId: addressId,
-                    freightPrice: res.data.freightPrice,
-                    goodsTotalPrice: res.data.goodsTotalPrice,
-                    orderTotalPrice: res.data.orderTotalPrice,
-                    goodsCount: res.data.goodsCount,
-                    outStock: res.data.outStock
+                    freightPrice: res.data.data.freightPrice,
+                    goodsTotalPrice: res.data.data.goodsTotalPrice,
+                    orderTotalPrice: res.data.data.orderTotalPrice,
+                    goodsCount: res.data.data.goodsCount,
+                    outStock: res.data.data.outStock
                 });
-                let goods = res.data.checkedGoodsList;
+                let goods = res.data.data.checkedGoodsList;
                 wx.setStorageSync('addressId', addressId);
-                if (res.data.outStock == 1) {
+                if (res.data.data.outStock == 1) {
                     util.showErrorToast('有部分商品缺货或已下架');
-                } else if (res.data.numberChange == 1) {
+                } else if (res.data.data.numberChange == 1) {
                     util.showErrorToast('部分商品库存有变动');
                 }
             }
@@ -167,10 +167,10 @@ Page({
             actualPrice: actualPrice,
             offlinePay: 0
         }, 'POST').then(res => {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 wx.removeStorageSync('orderId');
                 wx.setStorageSync('addressId', 0);
-                const orderId = res.data.orderInfo.id;
+                const orderId = res.data.data.orderInfo.id;
                 pay.payOrder(parseInt(orderId)).then(res => {
                     wx.redirectTo({
                         url: '/pages/payResult/payResult?status=1&orderId=' + orderId
@@ -202,7 +202,7 @@ Page({
             actualPrice: actualPrice,
             offlinePay: 1
         }, 'POST').then(res => {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 wx.removeStorageSync('orderId');
                 wx.setStorageSync('addressId', 0);
                 wx.redirectTo({

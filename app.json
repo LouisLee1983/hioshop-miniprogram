@@ -60,5 +60,14 @@
             }
         ]
     },
-    "sitemapLocation": "sitemap.json"
+    "sitemapLocation": "sitemap.json",
+    "lazyCodeLoading": "requiredComponents",
+    "preloadRule": {
+        "pages/index/index": {
+            "network": "all",
+            "packages": [
+                "important-components"
+            ]
+        }
+    }
 }

@@ -8,8 +8,8 @@ function payOrder(orderId) {
         util.request(api.PayPrepayId, {
             orderId: orderId
         }).then((res) => {
-            if (res.errno === 0) {
-                const payParam = res.data;
+            if (res.data.errno === 0) {
+                const payParam = res.data.data;
                 // 如果没有支付想直接支付成功，下面注释。
                 // -----------------------------------
                 wx.requestPayment({

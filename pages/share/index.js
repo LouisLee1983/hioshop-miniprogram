@@ -15,8 +15,8 @@ Page({
         util.request(api.GetBase64, {
             goodsId: id
         }, 'POST').then(function(res) {
-            if (res.errno === 0) {
-                that.getQrcodeJpg(res.data);
+            if (res.data.errno === 0) {
+                that.getQrcodeJpg(res.data.data);
             }
         });
     },
@@ -59,9 +59,9 @@ Page({
         util.request(api.GoodsShare, {
             id: id
         }).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    goods: res.data,
+                    goods: res.data.data,
                 });
                 that.eventDraw(qrcodeUrl);
             }

@@ -4,8 +4,8 @@ App({
   data: {
     deviceInfo: {}
   },
-  onLaunch: function () {
-    this.data.deviceInfo = wx.getSystemInfoSync();
+  onLaunch: function () {    
+    this.data.deviceInfo = wx.getDeviceInfo();
     console.log(this.data.deviceInfo);
     // 展示本地存储能力
     var logs = wx.getStorageSync('logs') || []
@@ -17,16 +17,16 @@ App({
         util.request(api.AuthLoginByWeixin, {
           code: res.code
         }, 'POST').then(function (res) {
-          if (res.errno === 0) {
-            let userInfo = res.data.userInfo;
-            wx.setStorageSync('token', res.data.token);
+          if (res.data.errno === 0) {
+            let userInfo = res.data.data.userInfo;
+            wx.setStorageSync('token', res.data.data.token);
             wx.setStorageSync('userInfo', userInfo);
           }
         });
       },
     });
     let that = this;
-    wx.getSystemInfo({ //  获取页面的有关信息
+    wx.getWindowInfo({ //  获取页面的有关信息
       success: function (res) {
         wx.setStorageSync('systemInfo', res)
         var ww = res.windowWidth;

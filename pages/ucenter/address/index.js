@@ -17,9 +17,9 @@ Page({
     getAddresses() {
         let that = this;
         util.request(api.GetAddresses).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    addresses: res.data
+                    addresses: res.data.data
                 })
             }
         });

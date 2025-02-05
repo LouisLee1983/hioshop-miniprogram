@@ -34,11 +34,11 @@ Page({
     getSearchKeyword() {
         let that = this;
         util.request(api.SearchIndex).then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    historyKeyword: res.data.historyKeywordList,
-                    defaultKeyword: res.data.defaultKeyword,
-                    hotKeyword: res.data.hotKeywordList
+                    historyKeyword: res.data.data.historyKeywordList,
+                    defaultKeyword: res.data.data.defaultKeyword,
+                    hotKeyword: res.data.data.hotKeywordList
                 });
             }
         });
@@ -54,9 +54,9 @@ Page({
     getHelpKeyword: function () {
         let that = this;
         util.request(api.SearchHelper, { keyword: that.data.keyword }).then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    helpKeyword: res.data
+                    helpKeyword: res.data.data
                 });
             }
         });
@@ -83,14 +83,14 @@ Page({
     getGoodsList: function () {
         let that = this;
         util.request(api.GoodsList, { keyword: that.data.keyword,sort: that.data.currentSortType, order: that.data.currentSortOrder, sales: that.data.salesSortOrder}).then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
                     searchStatus: true,
                     // categoryFilter: false,
-                    goodsList: res.data,
-                    // filterCategory: res.data.filterCategory,
-                    // page: res.data.currentPage,
-                    //   size: res.data.numsPerPage
+                    goodsList: res.data.data,
+                    // filterCategory: res.data.data.filterCategory,
+                    // page: res.data.data.currentPage,
+                    //   size: res.data.data.numsPerPage
                 });
             }
             //重新获取关键词

@@ -68,56 +68,24 @@ function testMobile(num) {
  */
 function request(url, data = {}, method = "GET") {
     return new Promise(function(resolve, reject) {
-        wx.request({
-            url: url,
-            data: data,
-            method: method,
-            header: {
-                'Content-Type': 'application/json',
-                'X-Hioshop-Token': wx.getStorageSync('token')
-            },
+        // 先检查网络状态
+        wx.getNetworkType({
             success: function(res) {
-                if (res.statusCode == 200) {
-
-                    if (res.data.errno == 401) {
-                        //需要登录后才可以操作
-
-                        // let code = null;
-                        // return login().then((res) => {
-                        //     code = res.code;
-                        //     return getUserInfo();
-                        // }).then((userInfo) => {
-                        //     //登录远程服务器
-                        //     request(api.AuthLoginByWeixin, {
-                        //         code: code,
-                        //         userInfo: userInfo
-                        //     }, 'POST').then(res => {
-                        //         if (res.errno === 0) {
-                        //             //存储用户信息
-                        //             wx.setStorageSync('userInfo', res.data.userInfo);
-                        //             wx.setStorageSync('token', res.data.token);
-                        //             resolve(res);
-                        //         } else {
-                        //             reject(res);
-                        //         }
-                        //     }).catch((err) => {
-                        //         reject(err);
-                        //     });
-                        // }).catch((err) => {
-                        //     reject(err);
-                        // })
-                    } else {
-                        resolve(res.data);
-                    }
-                } else {
-                    reject(res.errMsg);
+                if (res.networkType === 'none') {
+                    wx.showToast({
+                        title: '请检查网络连接',
+                        icon: 'none'
+                    });
+                    reject(new Error('no network'));
+                    return;
                 }
-
-            },
-            fail: function(err) {
-                reject(err)
+                
+                // 继续原来的请求
+                api.request(url, data, method)
+                    .then(resolve)
+                    .catch(reject);
             }
-        })
+        });
     });
 }
 
@@ -243,9 +211,9 @@ function loginNow() {
           request(api.AuthLoginByWeixin, {
             code: res.code
           }, 'POST').then(function (res) {
-            if (res.errno === 0) {
-              let userInfo = res.data.userInfo;
-              wx.setStorageSync('token', res.data.token);
+            if (res.data.errno === 0) {
+              let userInfo = res.data.data.userInfo;
+              wx.setStorageSync('token', res.data.data.token);
               wx.setStorageSync('userInfo', userInfo);
             }
           });

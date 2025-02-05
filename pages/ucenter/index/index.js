@@ -74,16 +74,16 @@ Page({
     util.request(api.AuthLoginByWeixin, {
       code: code
     }, 'POST').then(function (res) {
-      if (res.errno === 0) {
-        let userInfo = res.data.userInfo;
+      if (res.data.errno === 0) {
+        let userInfo = res.data.data.userInfo;
         that.setData({
-          is_new: res.data.is_new,
+          is_new: res.data.data.is_new,
           userInfo: userInfo,
           hasUserInfo: true
         })
-        wx.setStorageSync('token', res.data.token);
+        wx.setStorageSync('token', res.data.data.token);
         wx.setStorageSync('userInfo', userInfo);
-        app.globalData.token = res.data.token;
+        app.globalData.token = res.data.data.token;
       }
     });
   },
@@ -98,8 +98,8 @@ Page({
   getSettingsDetail() {
     let that = this;
     util.request(api.SettingsDetail).then(function (res) {
-      if (res.errno === 0) {
-        let userInfo = res.data;
+      if (res.data.errno === 0) {
+        let userInfo = res.data.data;
         // wx.setStorageSync('userInfo', userInfo);
         that.setData({
           userInfo: userInfo,
@@ -117,8 +117,8 @@ Page({
   getOrderInfo: function (e) {
     let that = this;
     util.request(api.OrderCountInfo).then(function (res) {
-      if (res.errno === 0) {
-        let status = res.data;
+      if (res.data.errno === 0) {
+        let status = res.data.data;
         that.setData({
           status: status
         });

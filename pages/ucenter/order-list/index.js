@@ -44,8 +44,8 @@ Page({
     getOrderInfo: function(e) {
         let that = this;
         util.request(api.OrderCountInfo).then(function(res) {
-            if (res.errno === 0) {
-                let status = res.data;
+            if (res.data.errno === 0) {
+                let status = res.data.data;
                 that.setData({
                     status: status
                 });
@@ -59,15 +59,15 @@ Page({
             size: that.data.size,
             page: that.data.allPage,
         }).then(function(res) {
-            if (res.errno === 0) {
-                let count = res.data.count;
+            if (res.data.errno === 0) {
+                let count = res.data.data.count;
                 that.setData({
                     allCount: count,
-                    allOrderList: that.data.allOrderList.concat(res.data.data),
-                    allPage: res.data.currentPage,
-                    orderList: that.data.allOrderList.concat(res.data.data)
+                    allOrderList: that.data.allOrderList.concat(res.data.data.data),
+                    allPage: res.data.data.currentPage,
+                    orderList: that.data.allOrderList.concat(res.data.data.data)
                 });
-                let hasOrderData = that.data.allOrderList.concat(res.data.data);
+                let hasOrderData = that.data.allOrderList.concat(res.data.data.data);
                 if (count == 0) {
                     that.setData({
                         hasOrder: 1
@@ -126,7 +126,7 @@ Page({
                     util.request(api.OrderCancel, {
                         orderId: orderId
                     }, 'POST').then(function(res) {
-                        if (res.errno === 0) {
+                        if (res.data.errno === 0) {
                             wx.showToast({
                                 title: '取消订单成功'
                             });

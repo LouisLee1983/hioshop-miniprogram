@@ -97,8 +97,8 @@ Page({
         util.request(api.GoodsDetail, {
             id: that.data.id
         }).then(function(res) {
-            if (res.errno === 0) {
-                let _specificationList = res.data.specificationList;
+            if (res.data.errno === 0) {
+                let _specificationList = res.data.data.specificationList;
                 // 如果仅仅存在一种货品，那么商品页面初始化时默认checked
                 if (_specificationList.valueList.length == 1) {
                     _specificationList.valueList[0].checked = true
@@ -112,23 +112,23 @@ Page({
                     });
                 }
                 let galleryImages = [];
-                for (const item of res.data.gallery) {
+                for (const item of res.data.data.gallery) {
                     galleryImages.push(item.img_url);
                 }
                 that.setData({
-                    goods: res.data.info,
-                    goodsNumber: res.data.info.goods_number,
-                    gallery: res.data.gallery,
-                    specificationList: res.data.specificationList,
-                    productList: res.data.productList,
-                    checkedSpecPrice: res.data.info.retail_price,
+                    goods: res.data.data.info,
+                    goodsNumber: res.data.data.info.goods_number,
+                    gallery: res.data.data.gallery,
+                    specificationList: res.data.data.specificationList,
+                    productList: res.data.data.productList,
+                    checkedSpecPrice: res.data.data.info.retail_price,
                     galleryImages: galleryImages,
                     loading:1
                 });
                 setTimeout(() => {
-                    WxParse.wxParse('goodsDetail', 'html', res.data.info.goods_desc, that);
+                    WxParse.wxParse('goodsDetail', 'html', res.data.data.info.goods_desc, that);
                 }, 1000);
-                wx.setStorageSync('goodsImage', res.data.info.https_pic_url);
+                wx.setStorageSync('goodsImage', res.data.data.info.https_pic_url);
             }
             else{
                 util.showErrorToast(res.errmsg)
@@ -334,9 +334,9 @@ Page({
     getCartCount: function() {
         let that = this;
         util.request(api.CartGoodsCount).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    cartGoodsCount: res.data.cartTotal.goodsCount
+                    cartGoodsCount: res.data.data.cartTotal.goodsCount
                 });
             }
         });
@@ -434,18 +434,18 @@ Page({
                 }, "POST")
                 .then(function(res) {
                     let _res = res;
-                    if (_res.errno == 0) {
+                    if (_res.data.errno == 0) {
                         wx.showToast({
                             title: '添加成功',
                         });
                         if (productLength != 1 || that.data.openAttr == true) {
                             that.setData({
                                 openAttr: !that.data.openAttr,
-                                cartGoodsCount: _res.data.cartTotal.goodsCount
+                                cartGoodsCount: _res.data.data.cartTotal.goodsCount
                             });
                         } else {
                             that.setData({
-                                cartGoodsCount: _res.data.cartTotal.goodsCount
+                                cartGoodsCount: _res.data.data.cartTotal.goodsCount
                             });
                         }
                     } else {
@@ -517,7 +517,7 @@ Page({
                 .then(function(res) {
                     let _res = res;
                     wx.hideLoading()
-                    if (_res.errno == 0) {
+                    if (_res.data.errno == 0) {
                         let id = that.data.id;
                         wx.navigateTo({
                             url: '/pages/order-check/index?addtype=1'

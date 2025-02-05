@@ -15,9 +15,9 @@ Page({
         util.request(api.OrderGoods, {
             orderId: id
         }).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    goodsList: res.data
+                    goodsList: res.data.data
                 });
             }
         });

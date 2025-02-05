@@ -16,10 +16,10 @@ Page({
     getFootprintList() {
         let that = this;
         util.request(api.FootprintList, { page: that.data.allPage, size: that.data.size }).then(function (res) {
-            if (res.errno === 0) {
-                let count = res.data.count;
+            if (res.data.errno === 0) {
+                let count = res.data.data.count;
                 let f1 = that.data.footprintList;
-                let f2 = res.data.data;
+                let f2 = res.data.data.data;
                 for (let i = 0; i < f2.length; i++) {
                     let last = f1.length - 1;
                     if (last >= 0 && f1[last][0].add_time == f2[i].add_time) {
@@ -34,8 +34,8 @@ Page({
 
                 that.setData({
                     allCount: count,
-                    allFootprintList: that.data.allFootprintList.concat(res.data.data),
-                    allPage: res.data.currentPage,
+                    allFootprintList: that.data.allFootprintList.concat(res.data.data.data),
+                    allPage: res.data.data.currentPage,
                     footprintList: f1,
                 });
                 if (count == 0) {
@@ -55,7 +55,7 @@ Page({
         let that = this;
         let id = e.currentTarget.dataset.val;
         util.request(api.FootprintDelete, { footprintId: id }, 'POST').then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 wx.showToast({
                     title: '取消成功',
                     icon: 'success',

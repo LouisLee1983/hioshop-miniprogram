@@ -80,9 +80,9 @@ Page({
         util.request(api.AddressDetail, {
             id: that.data.addressId
         }).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    address: res.data
+                    address: res.data.data
                 });
             }
         });
@@ -97,7 +97,7 @@ Page({
                     util.request(api.DeleteAddress, {
                         id: id
                     }, 'POST').then(function(res) {
-                        if (res.errno === 0) {
+                        if (res.data.errno === 0) {
                             wx.removeStorageSync('addressId');
                             util.showErrorToast('删除成功');
                             wx.navigateBack();
@@ -299,9 +299,9 @@ Page({
         util.request(api.RegionList, {
             parentId: regionId
         }).then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    regionList: res.data.map(item => {
+                    regionList: res.data.data.map(item => {
 
                         //标记已选择的
                         if (regionType == item.type && that.data.selectRegionList[regionType - 1].id == item.id) {
@@ -345,7 +345,7 @@ Page({
             address: address.address,
             is_default: address.is_default,
         }, 'POST').then(function(res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 wx.navigateBack()
             }
         });

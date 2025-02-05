@@ -20,9 +20,9 @@ Page({
   // getUserInfo: function (e) {
   //     app.globalData.userInfo = e.detail.userInfo
   //     user.loginByWeixin().then(res => {
-  //         app.globalData.userInfo = res.data.userInfo;
-  //         app.globalData.token = res.data.token;
-  //         let is_new = res.data.is_new;//服务器返回的数据；
+  //         app.globalData.userInfo = res.data.data.userInfo;
+  //         app.globalData.token = res.data.data.token;
+  //         let is_new = res.data.data.is_new;//服务器返回的数据；
   //         if (is_new == 0) {
   //             util.showErrorToast('您已经是老用户啦！');
   //             wx.navigateBack();
@@ -71,12 +71,12 @@ Page({
     util.request(api.AuthLoginByWeixin, {
       info: info
     }, 'POST').then(function (res) {
-      if (res.errno === 0) {
-        wx.setStorageSync('userInfo', res.data.userInfo);
-        wx.setStorageSync('token', res.data.token);
-        app.globalData.userInfo = res.data.userInfo;
-        app.globalData.token = res.data.token;
-        let is_new = res.data.is_new; //服务器返回的数据；
+      if (res.data.errno === 0) {
+        wx.setStorageSync('userInfo', res.data.data.userInfo);
+        wx.setStorageSync('token', res.data.data.token);
+        app.globalData.userInfo = res.data.data.userInfo;
+        app.globalData.token = res.data.data.token;
+        let is_new = res.data.data.is_new; //服务器返回的数据；
         if (is_new == 0) {
           util.showErrorToast('您已经是老用户啦！');
           wx.navigateBack();

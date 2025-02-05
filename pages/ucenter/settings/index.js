@@ -27,7 +27,7 @@ Page({
       },
       success(res) {
         if (res.statusCode == 200) {
-          let re = res.data
+          let re = res.data.data
           let echo = JSON.parse(re);
           let data = echo.data;
           let avatarUrl = data.fileUrl
@@ -60,16 +60,16 @@ Page({
   getSettingsDetail() {
     let that = this;
     util.request(api.SettingsDetail).then(function (res) {
-      if (res.errno === 0) {
+      if (res.data.errno === 0) {
         that.setData({
-          name: res.data.name,
-          mobile: res.data.mobile,
-          nickName: res.data.nickname,
+          name: res.data.data.name,
+          mobile: res.data.data.mobile,
+          nickName: res.data.data.nickname,
           hasAvatar: 0
         });
-        if (res.data.avatar != '') {
+        if (res.data.data.avatar != '') {
           that.setData({
-            avatarUrl: res.data.avatar,
+            avatarUrl: res.data.data.avatar,
             hasAvatar: 1
           })
         }
@@ -104,7 +104,7 @@ Page({
       nickName: nickName,
       avatar: avatar,
     }, 'POST').then(function (res) {
-      if (res.errno === 0) {
+      if (res.data.errno === 0) {
         util.showErrorToast('保存成功');
         wx.navigateBack()
       }

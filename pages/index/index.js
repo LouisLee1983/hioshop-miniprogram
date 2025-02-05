@@ -60,8 +60,8 @@ Page({
     onShareAppMessage: function () {
         let info = wx.getStorageSync('userInfo');
         return {
-            title: '海风小店',
-            desc: '开源微信小程序商城',
+            title: '横琴邻里',
+            desc: '横琴邻里商城',
             path: '/pages/index/index?id=' + info.id
         }
     },
@@ -73,21 +73,21 @@ Page({
     getIndexData: function () {
         let that = this;
         util.request(api.IndexUrl).then(function (res) {
-            if (res.errno === 0) {
+            if (res.data.errno === 0) {
                 that.setData({
-                    floorGoods: res.data.categoryList,
-                    banner: res.data.banner,
-                    channel: res.data.channel,
-                    notice: res.data.notice,
+                    floorGoods: res.data.data.categoryList,
+                    banner: res.data.data.banner,
+                    channel: res.data.data.channel,
+                    notice: res.data.data.notice,
                     loading: 1,
                 });
                 let cartGoodsCount = '';
-                if (res.data.cartCount == 0) {
+                if (res.data.data.cartCount == 0) {
                     wx.removeTabBarBadge({
                         index: 2,
                     })
                 } else {
-                    cartGoodsCount = res.data.cartCount + '';
+                    cartGoodsCount = res.data.data.cartCount + '';
                     wx.setTabBarBadge({
                         index: 2,
                         text: cartGoodsCount
@@ -106,7 +106,7 @@ Page({
                 userInfo: userInfo,
             });
         };
-        let info = wx.getSystemInfoSync();
+        let info = wx.getDeviceInfo();
         let sysHeight = info.windowHeight - 100;
         this.setData({
             sysHeight: sysHeight,
@@ -117,11 +117,11 @@ Page({
     getChannelShowInfo: function (e) {
         let that = this;
         util.request(api.ShowSettings).then(function (res) {
-            if (res.errno === 0) {
-                let show_channel = res.data.channel;
-                let show_banner = res.data.banner;
-                let show_notice = res.data.notice;
-                let index_banner_img = res.data.index_banner_img;
+            if (res.data.errno === 0) {
+                let show_channel = res.data.data.channel;
+                let show_banner = res.data.data.banner;
+                let show_notice = res.data.data.notice;
+                let index_banner_img = res.data.data.index_banner_img;
                 that.setData({
                     show_channel: show_channel,
                     show_banner: show_banner,
